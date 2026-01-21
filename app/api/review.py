@@ -1,25 +1,27 @@
 from fastapi import APIRouter
 from app.schemas.input_schema import ReviewInput
 from app.schemas.output_schema import ReviewOutput
+from app.core.llm import LocalLLM
+from pathlib import Path
+import json
 
 router = APIRouter()
+
+PROMPT_PATH = Path("prompts/reviewer_v1.txt")
+MODEL_PATH = "models/mistral-7b-instruct-q4.gguf"
+
+llm = LocalLLM(MODEL_PATH)
 
 
 @router.post("/review", response_model=ReviewOutput)
 def review_design(payload: ReviewInput):
-    return {
-        "overall_assessment": {
-            "verdict": "RISKY",
-            "confidence_level": "LOW",
-            "summary": "This is a placeholder review generated without LLM reasoning."
-        },
-        "critical_issues": [],
-        "moderate_issues": [],
-        "assumptions_detected": payload.assumptions,
-        "missing_information": ["Embedding model not specified"],
-        "questions_for_author": ["How is retrieval quality evaluated?"],
-        "phase_1_limitations": [
-            "LLM reasoning not yet integrated",
-            "No grounding or retrieval validation"
-        ]
-    }
+    system_prompt = PROMPT_PATH.read_text()
+
+    user_input = payload.json(indent=2)
+
+    raw_output = llm.generate(system_prompt, user_input)
+
+    # Intentionally fragile
+    parsed = json.loads(raw_output)
+
+    return parsed
