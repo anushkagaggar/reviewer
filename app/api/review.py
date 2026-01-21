@@ -17,9 +17,10 @@ llm = LocalLLM(MODEL_PATH)
 def review_design(payload: ReviewInput):
     system_prompt = PROMPT_PATH.read_text()
 
-    user_input = payload.json(indent=2)
+    user_input = payload.model_dump_json(indent=2)
 
     raw_output = llm.generate(system_prompt, user_input)
+    print("\n===== RAW MODEL OUTPUT =====\n", raw_output)
 
     # Intentionally fragile
     parsed = json.loads(raw_output)
