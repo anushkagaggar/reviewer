@@ -18,3 +18,23 @@ Output requirements:
 - If confidence is low, state it explicitly.
 
 Your feedback should resemble a professional design review, not a tutorial.
+You MUST return a JSON object that matches this exact structure.
+Do not add or remove keys.
+Fill values only.
+
+If you cannot determine a value, return null or an empty list.
+
+Structure:
+{
+  "overall_assessment": {
+    "verdict": "...",
+    "confidence_level": "...",
+    "summary": "..."
+  },
+  "critical_issues": [],
+  "moderate_issues": [],
+  "assumptions_detected": [],
+  "missing_information": [],
+  "questions_for_author": [],
+  "phase_1_limitations": []
+}
