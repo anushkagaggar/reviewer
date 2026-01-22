@@ -1,0 +1,21 @@
+Latency and Cost Trade-Offs in RAG Architectures
+
+RAG systems introduce additional computational steps beyond standard LLM inference, including embedding generation, similarity search, and context assembly. Each step contributes to latency and operational cost.
+
+Embedding generation can be expensive for large document collections. Batch processing and offline indexing reduce runtime overhead but increase preprocessing time.
+
+Similarity search complexity grows with corpus size. Brute-force search is acceptable for small datasets, but scaling requires approximate nearest neighbor methods or optimized databases.
+
+Retrieval latency directly affects user experience. Systems with slow retrieval pipelines may violate response-time requirements even if LLM inference is fast.
+
+Context size influences inference cost. Larger prompts increase token usage, raising API expenses and slowing generation. Careful filtering and ranking reduce unnecessary token consumption.
+
+Caching improves both cost and latency. Frequently accessed documents, embeddings, and query results can be reused to avoid repeated computation.
+
+Model selection affects cost structure. Smaller models reduce inference expense but may require more grounding. Larger models increase cost but may tolerate weaker retrieval.
+
+Infrastructure choices influence performance. CPU-based systems offer lower cost but higher latency. GPU-based systems reduce response time at increased operational expense.
+
+Traffic patterns must be considered. Burst traffic requires autoscaling, while steady workloads benefit from static provisioning.
+
+Effective RAG design balances retrieval quality, response time, and budget constraints. Optimizing only one dimension often degrades overall system performance.

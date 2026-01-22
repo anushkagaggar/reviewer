@@ -1,0 +1,21 @@
+Common Failure Modes in RAG-Based Systems
+
+Many observed failures in RAG systems originate from retrieval errors rather than LLM limitations. Understanding these patterns is essential for reliable system design.
+
+One frequent failure is irrelevant retrieval. Poor embeddings or weak similarity metrics may return unrelated documents, leading the model to generate misleading responses based on incorrect context.
+
+Another common issue is incomplete grounding. When relevant documents are missing from the index or poorly chunked, retrieval may omit critical information. The model then compensates through hallucination.
+
+Over-reliance on retrieved content is also problematic. Models may treat retrieved text as authoritative even when it is outdated, incorrect, or contextually inappropriate.
+
+Stale data is a major risk in enterprise environments. If documents are not updated regularly, retrieval may surface obsolete information, leading to policy violations or incorrect decisions.
+
+Prompt leakage can occur when retrieved documents contain instructions or formatting that conflict with system prompts. This may alter model behavior unexpectedly.
+
+Evaluation blind spots are another failure source. Many systems are tested only on ideal queries, leaving edge cases undetected.
+
+Query drift happens when user intent is misinterpreted during embedding. Slight semantic mismatches can cause retrieval to miss relevant content.
+
+Finally, silent failures are particularly dangerous. If retrieval returns weak matches without warning, the system may appear functional while producing unreliable outputs.
+
+Robust RAG systems must monitor, log, and analyze retrieval behavior to identify these failure patterns early.

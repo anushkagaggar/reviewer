@@ -1,0 +1,19 @@
+Context Window Management in RAG Systems
+
+The context window defines the maximum number of tokens that an LLM can process in a single request. In RAG systems, this window must accommodate user queries, retrieved document chunks, system instructions, and response generation.
+
+Poor context management leads to truncated inputs, loss of important information, and increased hallucination risk. Sending excessive or irrelevant content wastes tokens and reduces effective reasoning capacity.
+
+Effective context budgeting begins by reserving space for system prompts and expected output. The remaining budget should be allocated for retrieved content. Many systems allocate 40–60% of the window for grounding material.
+
+Retrieved chunks should be filtered and ranked before inclusion. Including low-relevance chunks increases noise and harms answer quality. Top-k values should be chosen based on empirical evaluation rather than intuition.
+
+Summarization can be used to compress retrieved content when documents are long. However, aggressive summarization may remove critical details and introduce bias.
+
+Dynamic context assembly improves efficiency. Instead of using a fixed number of chunks, systems can adapt the number based on query complexity and chunk relevance scores.
+
+Chunk overlap affects context usage. Overlapping chunks increase redundancy and consume additional tokens. Overlap must be balanced against context constraints.
+
+Monitoring token usage is essential. Systems should log prompt lengths, retrieval sizes, and output lengths to detect inefficiencies.
+
+Failure to manage context windows results in increased costs, degraded accuracy, and unstable behavior. Context budgeting is therefore a core design responsibility in RAG systems.
