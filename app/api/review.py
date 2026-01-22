@@ -46,7 +46,7 @@ def review_design(payload: ReviewInput):
     raw_output = llm.generate(full_prompt, "")
 
     print("\n===== RAW MODEL OUTPUT =====\n", raw_output)
-    with open("logs/raw_llm_outputs.txt", "a", encoding="utf-8") as f:
+    with open("logs/raw_llm_outputs_norm.txt", "a", encoding="utf-8") as f:
         f.write("\n\n==== NEW OUTPUT ====\n")
         f.write(raw_output)
 
