@@ -8,7 +8,7 @@ from copy import deepcopy
 from app.core.review_template import REVIEW_TEMPLATE
 from fastapi import HTTPException
 from app.core.retriever import SimpleRetriever
-
+from app.core.normalizer import normalize_list
 
 router = APIRouter()
 
@@ -19,7 +19,7 @@ llm = LocalLLM(MODEL_PATH)
 retriever = SimpleRetriever("knowledge_base")
 
 
-@router.post("/review")
+@router.post("/review", response_model=ReviewOutput)
 def review_design(payload: ReviewInput):
     system_prompt = PROMPT_PATH.read_text()
     user_input = payload.model_dump_json(indent=2)
@@ -62,8 +62,38 @@ def review_design(payload: ReviewInput):
     # Merge model response into template
     result = deepcopy(REVIEW_TEMPLATE)
 
-    for key in result:
-        if key in model_response:
-            result[key] = model_response[key]
+    result["overall_assessment"] = model_response.get(
+    "overall_assessment",
+    result["overall_assessment"])
+
+    result["critical_issues"] = normalize_list(
+        model_response.get("critical_issues", []),
+        "Critical Issue"
+    )
+
+    result["moderate_issues"] = normalize_list(
+        model_response.get("moderate_issues", []),
+        "Moderate Issue"
+    )
+
+    result["assumptions_detected"] = normalize_list(
+        model_response.get("assumptions_detected", []),
+        "Assumption"
+    )
+
+    result["missing_information"] = normalize_list(
+        model_response.get("missing_information", []),
+        "Missing Information"
+    )
+
+    result["questions_for_author"] = model_response.get(
+        "questions_for_author",
+        []
+    )
+
+    result["phase_1_limitations"] = model_response.get(
+        "phase_1_limitations",
+        []
+    )
 
     return result
