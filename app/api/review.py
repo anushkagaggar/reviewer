@@ -19,7 +19,7 @@ llm = LocalLLM(MODEL_PATH)
 retriever = SimpleRetriever("knowledge_base")
 
 
-@router.post("/review", response_model=ReviewOutput)
+@router.post("/review")
 def review_design(payload: ReviewInput):
     system_prompt = PROMPT_PATH.read_text()
     user_input = payload.model_dump_json(indent=2)
@@ -46,6 +46,10 @@ def review_design(payload: ReviewInput):
     raw_output = llm.generate(full_prompt, "")
 
     print("\n===== RAW MODEL OUTPUT =====\n", raw_output)
+    with open("logs/raw_llm_outputs.txt", "a", encoding="utf-8") as f:
+        f.write("\n\n==== NEW OUTPUT ====\n")
+        f.write(raw_output)
+
     # Intentionally fragile
     try:
         model_response = json.loads(raw_output)

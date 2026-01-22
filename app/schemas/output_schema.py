@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Union, Any
 
 
 class AssumptionDetail(BaseModel):
@@ -30,9 +30,9 @@ class Issue(BaseModel):
 
 class ReviewOutput(BaseModel):
     overall_assessment: Assessment
-    critical_issues: List[Issue]
-    moderate_issues: List[Issue]
-    assumptions_detected: List[AssumptionDetail]
-    missing_information: List[MissingInfoDetail]
+    critical_issues: List[Any]
+    moderate_issues: List[Any]
+    assumptions_detected: List[Union[str, AssumptionDetail, dict]]
+    missing_information: List[Union[str, MissingInfoDetail, dict]]
     questions_for_author: List[str]
     phase_1_limitations: List[str]
