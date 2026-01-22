@@ -7,6 +7,8 @@ import json
 from copy import deepcopy
 from app.core.review_template import REVIEW_TEMPLATE
 from fastapi import HTTPException
+from app.core.retriever import SimpleRetriever
+
 
 router = APIRouter()
 
@@ -14,6 +16,7 @@ PROMPT_PATH = Path("prompts/reviewer_v1.txt")
 MODEL_PATH = "models/mistral-7b-instruct-q4.gguf"
 
 llm = LocalLLM(MODEL_PATH)
+retriever = SimpleRetriever("knowledge_base")
 
 
 @router.post("/review", response_model=ReviewOutput)
@@ -21,7 +24,27 @@ def review_design(payload: ReviewInput):
     system_prompt = PROMPT_PATH.read_text()
     user_input = payload.model_dump_json(indent=2)
 
-    raw_output = llm.generate(system_prompt, user_input)
+    retrieved_docs = retriever.retrieve(payload.problem_statement)
+
+    context_blocks = []
+
+    for doc in retrieved_docs:
+        block = f"[Source: {doc['source']}]\n{doc['content']}"
+        context_blocks.append(block)
+
+    grounding_context = "\n\n".join(context_blocks)
+
+    full_prompt = f"""
+    {system_prompt}
+
+    REFERENCE MATERIAL:
+    {grounding_context}
+
+    USER INPUT:
+    {user_input}
+    """
+    raw_output = llm.generate(full_prompt, "")
+
     print("\n===== RAW MODEL OUTPUT =====\n", raw_output)
     # Intentionally fragile
     try:

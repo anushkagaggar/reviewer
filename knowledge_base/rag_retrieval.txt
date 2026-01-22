@@ -1,0 +1,21 @@
+Retrieval Strategies and Similarity Search in RAG Systems
+
+Retrieval is the process of selecting the most relevant document chunks for a given user query. It acts as the bridge between stored knowledge and the LLM’s reasoning.
+
+The most common retrieval method is dense vector similarity search. The query is embedded using the same model as the documents, and cosine similarity or dot product is used to measure closeness between vectors.
+
+Top-k retrieval is widely used, where the k most similar chunks are selected. Typical values range from 3 to 10. Small k may miss important context, while large k increases noise and context cost.
+
+Similarity scores should be inspected during development. Very close scores across many chunks indicate weak embeddings. Highly uneven scores may indicate overfitting or narrow representations.
+
+In early-stage systems, in-memory vector storage is sufficient. Vectors can be stored in lists or arrays and searched using brute-force similarity. This simplifies debugging and avoids infrastructure complexity.
+
+As data grows, specialized vector databases may be introduced. However, retrieval logic should remain independent of storage technology.
+
+Filtering by metadata can improve retrieval quality. For example, restricting search to certain document types or sections reduces irrelevant matches.
+
+Hybrid retrieval combining keyword search and embeddings can improve recall. However, this adds complexity and should be introduced only after dense retrieval is understood.
+
+Poor retrieval manifests as irrelevant grounding, hallucinated connections, or missing key information. Many perceived “LLM failures” are actually retrieval failures.
+
+Retrieval quality must be evaluated separately from generation quality. Debugging requires inspecting retrieved chunks before they are passed to the model.

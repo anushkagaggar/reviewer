@@ -38,3 +38,6 @@ Structure:
   "questions_for_author": [],
   "phase_1_limitations": []
 }
+Use the REFERENCE MATERIAL when relevant.
+If the reference material does not help, say so explicitly.
+Do not invent best practices.

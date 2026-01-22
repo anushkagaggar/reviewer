@@ -1,0 +1,21 @@
+Embedding Models and Semantic Representation in RAG
+
+Embeddings are vector representations of text that capture semantic meaning in numerical form. In RAG systems, embeddings are used to compare user queries with stored document chunks to find relevant information.
+
+A good embedding model should map semantically similar texts to nearby vectors in high-dimensional space. For example, “context window management” and “prompt length control” should produce similar embeddings.
+
+Embedding models differ in size, speed, accuracy, and domain specialization. Smaller models are faster and cheaper but may lack semantic precision. Larger models are more accurate but increase latency and resource usage.
+
+For local or constrained systems, lightweight sentence-transformer models are often preferred. Examples include MiniLM-based or MPNet-based models. These can run on CPU and provide reasonable quality.
+
+Text preprocessing affects embedding quality. Lowercasing, removing excessive whitespace, and normalizing formatting improve consistency. However, aggressive cleaning may remove important technical terms.
+
+Embedding generation should be deterministic. The same text should always produce the same vector. Any randomness introduces instability into retrieval results.
+
+Batching embeddings improves performance when indexing many documents. However, batch sizes must respect memory limits. On low-RAM systems, incremental embedding is safer.
+
+Embedding dimensionality affects storage and similarity computation. Higher dimensions improve expressiveness but increase memory and computation costs. Most practical systems use dimensions between 384 and 1024.
+
+Choosing an inappropriate embedding model leads to poor retrieval regardless of downstream LLM quality. Strong grounding requires embeddings that accurately reflect domain-specific meaning.
+
+Regular evaluation using known query–document pairs is necessary to verify embedding effectiveness.

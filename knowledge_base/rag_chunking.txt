@@ -1,0 +1,17 @@
+RAG Chunking and Document Splitting
+
+Chunking is the process of splitting large documents into smaller pieces before creating embeddings. This step is critical because retrieval quality depends heavily on how information is segmented.
+
+If chunks are too large, they may contain multiple unrelated topics. This reduces retrieval precision and wastes context window space when passed to the LLM. Large chunks also make it harder for embeddings to represent specific ideas accurately.
+
+If chunks are too small, important context may be lost. Very small chunks often lack semantic meaning on their own, leading to fragmented retrieval results. This can cause the LLM to receive incomplete information and produce vague or incorrect answers.
+
+In practice, chunk sizes typically range from 200 to 500 tokens. This range balances semantic coherence with retrieval precision. The ideal size depends on the document type and the expected query patterns.
+
+Chunk overlap is often used to reduce information loss at boundaries. Overlapping 10–20% of tokens between consecutive chunks helps preserve context that may span across sections. However, excessive overlap increases storage and retrieval costs.
+
+Chunk boundaries should respect natural language structure whenever possible. Splitting by paragraphs, headings, or sentences is preferred over splitting by raw token counts. Poor boundary choices can break logical flow and reduce embedding quality.
+
+Metadata should be stored with each chunk, such as source document, section title, and position. This improves traceability and allows downstream systems to cite sources or reconstruct context.
+
+Poor chunking leads to low recall, irrelevant retrieval, and unstable LLM outputs. Good chunking enables precise grounding, efficient context usage, and consistent system behavior.
