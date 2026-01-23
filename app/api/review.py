@@ -9,6 +9,8 @@ from app.core.review_template import REVIEW_TEMPLATE
 from fastapi import HTTPException
 from app.core.retriever import SimpleRetriever
 from app.core.normalizer import normalize_list
+from app.core.memory import MemoryManager
+memory = MemoryManager()
 
 router = APIRouter()
 
@@ -33,12 +35,32 @@ def review_design(payload: ReviewInput):
         context_blocks.append(block)
 
     grounding_context = "\n\n".join(context_blocks)
+    stm_history = memory.get_stm(
+    payload.system_name,
+    payload.version
+    )
+
+    ltm_history = memory.get_ltm(
+        payload.system_name,
+        payload.version
+    )
+
+    MEMORY_CONTEXT = f"""
+    PREVIOUS REVIEWS (STM):
+    {stm_history}
+
+    LONG TERM PATTERNS (LTM):
+    {ltm_history}
+    """
 
     full_prompt = f"""
     {system_prompt}
 
     REFERENCE MATERIAL:
     {grounding_context}
+
+    MEMORY:
+    {MEMORY_CONTEXT}
 
     USER INPUT:
     {user_input}
@@ -94,6 +116,28 @@ def review_design(payload: ReviewInput):
     result["phase_1_limitations"] = model_response.get(
         "phase_1_limitations",
         []
+    )
+
+    # Extract issue titles for memory
+    issues = []
+
+    for section in ["critical_issues", "moderate_issues", "assumptions_detected", "missing_information"]:
+        for item in result.get(section, []):
+            title = item.get("title")
+            if title:
+                issues.append(title)
+
+    # Update memories
+    memory.update_stm(
+        payload.system_name,
+        payload.version,
+        issues
+    )
+
+    memory.update_ltm(
+        payload.system_name,
+        payload.version,
+        issues
     )
 
     return result
