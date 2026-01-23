@@ -10,6 +10,8 @@ from fastapi import HTTPException
 from app.core.retriever import SimpleRetriever
 from app.core.normalizer import normalize_list
 from app.core.memory import MemoryManager
+from app.core.memory_formatter import format_memory
+
 memory = MemoryManager()
 
 router = APIRouter()
@@ -45,26 +47,29 @@ def review_design(payload: ReviewInput):
         payload.version
     )
 
-    MEMORY_CONTEXT = f"""
-    PREVIOUS REVIEWS (STM):
-    {stm_history}
-
-    LONG TERM PATTERNS (LTM):
-    {ltm_history}
-    """
+    memory_summary = format_memory(stm_history, ltm_history)
 
     full_prompt = f"""
     {system_prompt}
 
+    You are reviewing a new version of an existing system.
+
+    You MUST compare this version with past reviews.
+
+    If issues are unresolved, mark them as recurring.
+    If issues are fixed, acknowledge improvement.
+    If regressions appear, highlight them.
+
+    PAST REVIEW SUMMARY:
+    {memory_summary}
+
     REFERENCE MATERIAL:
     {grounding_context}
-
-    MEMORY:
-    {MEMORY_CONTEXT}
 
     USER INPUT:
     {user_input}
     """
+
     raw_output = llm.generate(full_prompt, "")
 
     print("\n===== RAW MODEL OUTPUT =====\n", raw_output)

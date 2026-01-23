@@ -1,1 +1,46 @@
-{}
+{
+  "KnowledgeAssist::v1": [
+    {
+      "timestamp": "2026-01-23T16:00:47.664659",
+      "key_issues": [
+        "Assumption",
+        "Assumption",
+        "Missing Information",
+        "Missing Information",
+        "Missing Information",
+        "Missing Information"
+      ]
+    }
+  ],
+  "KnowledgeAssist::v2": [
+    {
+      "timestamp": "2026-01-23T16:07:34.022273",
+      "key_issues": [
+        "Embedding quality",
+        "Chunk size",
+        "Embedding quality is sufficient",
+        "Chunk size is appropriate",
+        "Missing Information",
+        "Missing Information",
+        "Missing Information",
+        "Missing Information"
+      ]
+    }
+  ],
+  "KnowledgeAssist::v3": [
+    {
+      "timestamp": "2026-01-23T16:13:31.575786",
+      "key_issues": [
+        "Critical Issue",
+        "Critical Issue",
+        "Critical Issue",
+        "Critical Issue",
+        "Assumption",
+        "Missing Information",
+        "Missing Information",
+        "Missing Information",
+        "Missing Information"
+      ]
+    }
+  ]
+}

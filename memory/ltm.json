@@ -1,1 +1,27 @@
-{}
+{
+  "KnowledgeAssist::v1": {
+    "recurring_issues": [
+      "Assumption",
+      "Missing Information"
+    ],
+    "last_updated": "2026-01-23T16:00:47.664659"
+  },
+  "KnowledgeAssist::v2": {
+    "recurring_issues": [
+      "Embedding quality",
+      "Chunk size",
+      "Embedding quality is sufficient",
+      "Chunk size is appropriate",
+      "Missing Information"
+    ],
+    "last_updated": "2026-01-23T16:07:34.022273"
+  },
+  "KnowledgeAssist::v3": {
+    "recurring_issues": [
+      "Critical Issue",
+      "Assumption",
+      "Missing Information"
+    ],
+    "last_updated": "2026-01-23T16:13:31.580770"
+  }
+}
